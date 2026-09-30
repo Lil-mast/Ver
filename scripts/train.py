@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Train a 2D U-Net on BraTS HDF5 slices."""
 
 from __future__ import annotations

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Evaluate a checkpoint on the BraTS HDF5 val split."""
 
 from __future__ import annotations

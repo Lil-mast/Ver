@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Create a tiny synthetic BraTS-like HDF5 pack for CPU smoke tests."""
 
 from __future__ import annotations
