@@ -28,7 +28,16 @@ def find_data_dir(root: Path) -> Path:
     root = root.resolve()
     if any(root.glob("volume_*_slice_*.h5")):
         return root
-    candidates = sorted(root.rglob("volume_*_slice_*.h5"))
+
+    preferred = root / "BraTS2020_training_data" / "content" / "data"
+    if preferred.is_dir() and any(preferred.glob("volume_*_slice_*.h5")):
+        return preferred
+
+    candidates = sorted(
+        p
+        for p in root.rglob("volume_*_slice_*.h5")
+        if "_synthetic_backup" not in p.parts
+    )
     if not candidates:
         raise FileNotFoundError(
             f"No volume_*_slice_*.h5 files under {root}. "
@@ -46,7 +55,9 @@ def find_metadata_csv(root: Path) -> Path | None:
         direct = root / name
         if direct.is_file():
             return direct
-        matches = list(root.rglob(name))
+        matches = [
+            p for p in root.rglob(name) if "_synthetic_backup" not in p.parts
+        ]
         if matches:
             return matches[0]
     return None
@@ -83,31 +94,35 @@ def _load_h5_pair(path: Path) -> tuple[np.ndarray, np.ndarray]:
             image = np.transpose(image, (2, 0, 1))
 
     # mask: (H,W), (H,W,C) one-hot, or (C,H,W)
+    # awsaf49 HDF5 uses (H,W,3) one-hot without an explicit background channel.
+    one_hot = False
     if mask.ndim == 3:
         if mask.shape[-1] <= 4 and mask.shape[0] > 4:
-            # one-hot HWC → class map; if multi-label one-hot of WT/TC/ET, take argmax+1
             if mask.max() <= 1:
-                # background where all zero
-                cls = mask.argmax(axis=-1).astype(np.int64)
                 empty = mask.sum(axis=-1) == 0
+                cls = mask.argmax(axis=-1).astype(np.int64) + 1
                 cls[empty] = 0
-                # shift if classes were 0..K-1 without explicit bg channel
                 mask = cls
+                one_hot = True
             else:
                 mask = mask[..., 0]
         elif mask.shape[0] <= 4:
             if mask.max() <= 1:
-                cls = mask.argmax(axis=0).astype(np.int64)
                 empty = mask.sum(axis=0) == 0
+                cls = mask.argmax(axis=0).astype(np.int64) + 1
                 cls[empty] = 0
                 mask = cls
+                one_hot = True
             else:
                 mask = mask[0]
         else:
             mask = mask[..., 0] if mask.shape[-1] < mask.shape[0] else mask[0]
 
     image = image.astype(np.float32)
-    mask = remap_brats_labels(mask.astype(np.int64))
+    if one_hot:
+        mask = mask.astype(np.int64)
+    else:
+        mask = remap_brats_labels(mask.astype(np.int64))
     return image, mask
 
 

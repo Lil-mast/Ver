@@ -36,7 +36,11 @@ Extra commits for Kaggle download wiring, bugfixes, and docs are welcome.
 
 ## Data
 
-Target Kaggle dataset: `awsaf49/brats2020-training-data` → `data/brats2020/` (gitignored). Prefer Kaggle MCP (`https://www.kaggle.com/mcp`); fallback: Kaggle CLI.
+Target Kaggle dataset: `awsaf49/brats2020-training-data` → `data/brats2020/` (gitignored). Prefer Kaggle MCP (`https://www.kaggle.com/mcp`); fallback: Kaggle CLI / API with `KGAT` bearer token.
+
+**Status (2026-09-30):** Real pack downloaded via Kaggle API (~57k `volume_*_slice_*.h5` files + `BraTS20 Training Metadata.csv`). Synthetic fixture kept under `data/brats2020/_synthetic_backup/`.
+
+After using a token in chat or configs, **rotate it** on Kaggle Settings → API.
 
 ## Related
 
