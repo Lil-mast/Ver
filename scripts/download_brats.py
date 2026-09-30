@@ -4,21 +4,64 @@
 Preferred: Kaggle MCP (https://www.kaggle.com/mcp) with download_dataset
   owner_slug=awsaf49  dataset_slug=brats2020-training-data
 
-Fallback (this script): Kaggle CLI — requires ~/.kaggle/kaggle.json
-  or env KAGGLE_USERNAME + KAGGLE_KEY.
+Fallback (this script):
+  export KAGGLE_API_TOKEN=KGAT_...   # bearer token from Kaggle Settings → API
+  python scripts/download_brats.py
+
+Or classic ~/.kaggle/kaggle.json + `kaggle` CLI.
 """
 
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import subprocess
 import sys
 import zipfile
 from pathlib import Path
+from urllib.request import Request, urlopen
 
 
 DATASET = "awsaf49/brats2020-training-data"
+DOWNLOAD_URL = (
+    "https://www.kaggle.com/api/v1/datasets/download/awsaf49/brats2020-training-data"
+)
+
+
+def download_with_token(out: Path, token: str) -> None:
+    zip_path = out / "brats2020-training-data.zip"
+    print(f"Downloading {DATASET} with KGAT token → {zip_path} …")
+    req = Request(DOWNLOAD_URL, headers={"Authorization": f"Bearer {token}"})
+    with urlopen(req) as resp:
+        # urlopen follows redirects by default for http.client in recent Python
+        total = 0
+        with zip_path.open("wb") as f:
+            while True:
+                chunk = resp.read(1024 * 1024)
+                if not chunk:
+                    break
+                f.write(chunk)
+                total += len(chunk)
+                if total % (64 * 1024 * 1024) < 1024 * 1024:
+                    print(f"  … {total / 1e9:.2f} GB", flush=True)
+    print("Extracting …")
+    with zipfile.ZipFile(zip_path) as zf:
+        zf.extractall(out)
+    zip_path.unlink(missing_ok=True)
+
+
+def download_with_cli(out: Path) -> None:
+    if shutil.which("kaggle") is None:
+        raise RuntimeError(
+            "kaggle CLI not found. Install with: uv pip install kaggle\n"
+            "Or set KAGGLE_API_TOKEN=KGAT_... and re-run."
+        )
+    print(f"Downloading {DATASET} via kaggle CLI → {out} …")
+    subprocess.run(
+        ["kaggle", "datasets", "download", "-d", DATASET, "-p", str(out), "--unzip"],
+        check=True,
+    )
 
 
 def main() -> int:
@@ -33,40 +76,31 @@ def main() -> int:
     out: Path = args.out
     out.mkdir(parents=True, exist_ok=True)
 
-    if shutil.which("kaggle") is None:
-        print(
-            "kaggle CLI not found. Install with: uv pip install kaggle\n"
-            "Or connect Kaggle MCP in Cursor (~/.cursor/mcp.json) and ask the "
-            "agent to download awsaf49/brats2020-training-data.",
-            file=sys.stderr,
-        )
+    token = os.environ.get("KAGGLE_API_TOKEN") or os.environ.get("KAGGLE_KEY")
+    try:
+        if token and str(token).startswith("KGAT"):
+            download_with_token(out, str(token))
+        else:
+            download_with_cli(out)
+    except Exception as exc:  # noqa: BLE001
+        print(f"Download failed: {exc}", file=sys.stderr)
         return 1
 
-    print(f"Downloading {DATASET} → {out} …")
-    subprocess.run(
-        [
-            "kaggle",
-            "datasets",
-            "download",
-            "-d",
-            DATASET,
-            "-p",
-            str(out),
-            "--unzip",
-        ],
-        check=True,
-    )
-
-    # Flatten accidental nested zips if CLI left any
     for zpath in out.glob("*.zip"):
         with zipfile.ZipFile(zpath) as zf:
             zf.extractall(out)
         zpath.unlink()
 
-    n_h5 = len(list(out.rglob("volume_*_slice_*.h5")))
-    print(f"Done. Found {n_h5} HDF5 slice files under {out}")
-    if n_h5 == 0:
-        print("Warning: no volume_*_slice_*.h5 files found — check unzip layout.", file=sys.stderr)
+    n_real = len(
+        [
+            p
+            for p in out.rglob("volume_*_slice_*.h5")
+            if "_synthetic_backup" not in p.parts
+        ]
+    )
+    print(f"Done. Found {n_real} real HDF5 slices under {out}")
+    if n_real == 0:
+        print("Warning: no volume_*_slice_*.h5 files found.", file=sys.stderr)
         return 2
     return 0
 
