@@ -88,6 +88,18 @@ python scripts/evaluate.py               # writes checkpoints/eval_summary.json
 
 Real data: download `awsaf49/brats2020-training-data` into `data/brats2020/` (Kaggle MCP or `python scripts/download_brats.py`).
 
+### API
+
+```bash
+source .venv/bin/activate
+uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+- `GET /health` — liveness + whether weights loaded  
+- `GET /model` — architecture / checkpoint metadata  
+- `POST /predict` — multipart upload of a `.h5` slice → PNG overlays (base64) + class counts  
+- `POST /predict/path?path=...` — same for a server-local path (dev)
+
 ---
 
 ## License

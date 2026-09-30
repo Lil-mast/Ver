@@ -11,8 +11,10 @@ Aim for **at least five commits** before calling the MVP done. Each commit shoul
 | 1 | Project foundation: `pyproject.toml`, `.gitignore`, package stub, 2D config, README for Python 3.12 + uv | done (`e40a133`) |
 | 2 | BraTS HDF5 dataset + download helper | done (`1db0a16`) |
 | 3 | 2D U-Net + train / eval smoke scripts | done |
+| 4 | FastAPI `/health` + `/model` + `/predict` | done |
+| 5 | Thin frontend + docs polish | pending |
 
-### Synthetic data (until Kaggle auth)
+### Synthetic data (dev fixture)
 
 ```bash
 source .venv/bin/activate
@@ -21,9 +23,16 @@ python scripts/train.py --epochs 2 --max-patients 4
 python scripts/evaluate.py
 ```
 
-Replace `data/brats2020/` with the real Kaggle pack when credentials are available.
-| 4 | FastAPI `/health` + `/predict` | pending |
-| 5 | Thin frontend + docs polish | pending |
+### API
+
+```bash
+source .venv/bin/activate
+uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+# GET  /health  /model
+# POST /predict  (multipart .h5)
+# POST /predict/path?path=data/brats2020/.../volume_1_slice_31.h5
+```
+
 
 Extra commits for Kaggle download wiring, bugfixes, and docs are welcome.
 
