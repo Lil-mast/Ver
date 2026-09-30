@@ -10,11 +10,11 @@ build/
 .ruff_cache/
 .mypy_cache/
 
-# Data & artifacts
-data/
-checkpoints/
-runs/
-outputs/
+# Data & artifacts (repo-root only — do not ignore src/verdantmed/data)
+/data/
+/checkpoints/
+/runs/
+/outputs/
 *.pt
 *.pth
 *.onnx

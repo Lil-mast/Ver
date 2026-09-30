@@ -23,17 +23,16 @@ How VerdantMed AI trains, evaluates, and serves medical imaging models — with 
 | Next    | CT, X-ray, ultrasound |
 | Longer  | Multi-modal fusion (imaging + clinical metadata) |
 
-### Formats
+### Formats (MVP vs later)
 
-- **NIfTI** — primary for research volumes and BraTS / MSD-style datasets
-- **DICOM** — clinical ingest; convert or stream into the training / inference path
-- Support for **2D slices** and **3D volumes**
+- **MVP:** per-slice **HDF5** from Kaggle `awsaf49/brats2020-training-data` (`volume_{id}_slice_{n}.h5`, keys `image` / `mask`)
+- **Later:** **NIfTI** volumes (BraTS / MSD), **DICOM** clinical ingest
+- MVP trains a **2D** U-Net on axial slices (CPU-friendly). 3D volumes remain on the roadmap.
 
 ### Datasets
 
-- BraTS (brain tumor segmentation)
-- Medical Segmentation Decathlon
-- Custom NIfTI / DICOM collections
+- BraTS 2020 training (HDF5 slices) — primary for this sprint
+- Medical Segmentation Decathlon / custom NIfTI — later
 
 ### Preprocessing & Augmentation
 

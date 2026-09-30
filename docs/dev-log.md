@@ -8,8 +8,8 @@ Aim for **at least five commits** before calling the MVP done. Each commit shoul
 
 | # | Milestone | Status |
 |---|-----------|--------|
-| 1 | Project foundation: `pyproject.toml`, `.gitignore`, package stub, 2D config, README for Python 3.12 + uv | in progress |
-| 2 | BraTS HDF5 dataset + transforms | pending |
+| 1 | Project foundation: `pyproject.toml`, `.gitignore`, package stub, 2D config, README for Python 3.12 + uv | done (`e40a133`) |
+| 2 | BraTS HDF5 dataset + download helper | in progress |
 | 3 | 2D U-Net + train / eval smoke scripts | pending |
 | 4 | FastAPI `/health` + `/predict` | pending |
 | 5 | Thin frontend + docs polish | pending |
