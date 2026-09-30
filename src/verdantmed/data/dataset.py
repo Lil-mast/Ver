@@ -11,7 +11,7 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
-# Official BraTS labels → contiguous class indices for CrossEntropy
+# Official BraTS labels contiguous class indices for CrossEntropy
 BRATS_LABEL_MAP = {0: 0, 1: 1, 2: 2, 4: 3}
 
 
