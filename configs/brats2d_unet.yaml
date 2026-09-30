@@ -1,0 +1,32 @@
+seed: 42
+device: cpu  # set to cuda when a GPU is available
+
+data:
+  root: data/brats2020
+  metadata: data/brats2020/BraTS20 Training Metadata.csv
+  # Limit patients for CPU smoke / overnight subset training (null = all)
+  max_patients: 8
+  val_fraction: 0.2
+  image_size: 128
+  num_workers: 0
+  # BraTS labels: 0 bg, 1 NCR/NET, 2 edema, 4 enhancing → remapped to 0..3
+  num_classes: 4
+
+model:
+  name: unet2d
+  in_channels: 4  # T1, T1ce, T2, FLAIR when present; padded if fewer
+  out_channels: 4
+  channels: [16, 32, 64, 128]
+  strides: [2, 2, 2]
+
+train:
+  epochs: 2
+  batch_size: 4
+  lr: 1.0e-3
+  weight_decay: 1.0e-5
+  amp: false
+  checkpoint_dir: checkpoints
+  log_every: 20
+
+eval:
+  batch_size: 4

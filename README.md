@@ -2,7 +2,7 @@
 
 **Precision that heals — faded green, focused care.**
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-#A8D5BA)](https://www.python.org/)
+[![Python 3.10–3.12](https://img.shields.io/badge/python-3.10%E2%80%933.12-#A8D5BA)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-#7FB69A)](https://pytorch.org/)
 [![MONAI](https://img.shields.io/badge/MONAI-1.3+-#A8D5BA)](https://monai.io/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-#A8D5BA)](https://fastapi.tiangolo.com/)
@@ -10,15 +10,15 @@
 
 > Medical image analysis platform for accurate detection and segmentation of pathologies (e.g. brain tumors on MRI) using state-of-the-art deep learning.
 
-VerdantMed AI is a research-to-production pipeline for training, validating, and serving convolutional and transformer-based models on medical imaging data. It prioritises reproducibility, GPU efficiency (NVIDIA CUDA / Tensor Cores), and clinical-grade evaluation metrics.
+VerdantMed AI is a research-to-production pipeline for training, validating, and serving models on medical imaging data. The current MVP targets **2D BraTS slice segmentation** (HDF5) with FastAPI serving and a thin frontend next.
 
 ---
 
 ## Why VerdantMed AI?
 
 - Addresses a real clinical need: early and precise detection of tumours and other lesions.
-- Built on an NVIDIA-accelerated stack (MONAI + PyTorch + CUDA).
-- Supports both classification and pixel-level segmentation.
+- Built on MONAI + PyTorch (CPU today; CUDA when a GPU is available).
+- Supports pixel-level segmentation; classification and more modalities later.
 - Designed for extensibility to CT, X-ray, ultrasound, and multi-modal data.
 
 ---
@@ -29,8 +29,7 @@ VerdantMed AI is a research-to-production pipeline for training, validating, and
 |----------|----------------|
 | [Technical Architecture](docs/architecture.md) | Pipeline, models, imaging stack, FastAPI serving, metrics |
 | [Case Study](docs/case-study.md) | Problem, audience, and product framing |
-
-A frontend is planned; it is not part of the current scope.
+| [Development log](docs/dev-log.md) | Sprint notes and incremental milestones |
 
 ---
 
@@ -39,14 +38,13 @@ A frontend is planned; it is not part of the current scope.
 | Component     | Technology |
 |---------------|------------|
 | Deep Learning | PyTorch 2.x + MONAI |
-| Accelerators  | NVIDIA CUDA, cuDNN, Tensor Cores |
-| Data          | BraTS, Medical Segmentation Decathlon, custom NIfTI/DICOM |
-| Augmentation  | MONAI transforms + Albumentations |
-| Training      | DistributedDataParallel, AMP |
-| Evaluation    | MONAI metrics + clinical KPIs |
+| Data (MVP)    | BraTS 2020 HDF5 slices (`awsaf49/brats2020-training-data`) |
+| Training      | 2D U-Net, CPU-friendly subset configs |
 | API           | FastAPI |
 | Packaging     | [uv](https://docs.astral.sh/uv/) |
-| Frontend      | Coming soon |
+| Frontend      | Coming soon (thin upload / overlay UI) |
+
+**Python:** `>=3.10,<3.13`. PyTorch wheels do not support 3.13+ yet — use **3.12**.
 
 ---
 
@@ -54,27 +52,30 @@ A frontend is planned; it is not part of the current scope.
 
 ### Prerequisites
 
-- Python 3.10+
-- [uv](https://docs.astral.sh/uv/)
-- NVIDIA GPU + CUDA (recommended for training)
+- Python **3.12** (recommended) via [uv](https://docs.astral.sh/uv/)
+- BraTS 2020 training data under `data/brats2020/` (see [dev log](docs/dev-log.md))
 
 ### Environment Setup
 
 ```bash
-# Install uv if needed: https://docs.astral.sh/uv/getting-started/installation/
-
-# Create a virtual environment and install dependencies
-uv venv --python 3.10
+# Create venv on 3.12 (not 3.13+)
+uv venv --python 3.12
 source .venv/bin/activate
 
-# PyTorch with CUDA (adjust CUDA version as needed)
-uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+# If /tmp is small, point temp/cache at home before large installs:
+# export TMPDIR=$HOME/.cache/uv-tmp UV_CACHE_DIR=$HOME/.cache/uv
 
-# MONAI and medical imaging stack
-uv pip install "monai[all]" nibabel pydicom scikit-image matplotlib seaborn wandb fastapi uvicorn
+# CPU torch (default on this machine). Omit torchaudio — not needed for MRI.
+uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+# Project + medical stack
+uv pip install -e .
+
+# On a CUDA machine instead:
+# uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 ```
 
-Training, evaluation, and API entrypoints will land as the project takes shape. See [Technical Architecture](docs/architecture.md) for the intended pipeline.
+Training / API entrypoints land in later commits this sprint.
 
 ---
 
