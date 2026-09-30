@@ -77,6 +77,17 @@ uv pip install -e .
 
 Training / API entrypoints land in later commits this sprint.
 
+### Smoke train (synthetic until Kaggle data is present)
+
+```bash
+source .venv/bin/activate
+python scripts/make_synthetic_brats.py   # tiny HDF5 fixture
+python scripts/train.py --epochs 2 --max-patients 4
+python scripts/evaluate.py               # writes checkpoints/eval_summary.json
+```
+
+Real data: download `awsaf49/brats2020-training-data` into `data/brats2020/` (Kaggle MCP or `python scripts/download_brats.py`).
+
 ---
 
 ## License

@@ -7,7 +7,7 @@ data:
   # Limit patients for CPU smoke / overnight subset training (null = all)
   max_patients: 8
   val_fraction: 0.2
-  image_size: 128
+  image_size: 64  # 128 once real BraTS + more RAM/time
   num_workers: 0
   # BraTS labels: 0 bg, 1 NCR/NET, 2 edema, 4 enhancing → remapped to 0..3
   num_classes: 4
