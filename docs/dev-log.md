@@ -53,6 +53,7 @@ After using a token in chat or configs, **rotate it** on Kaggle Settings → API
 
 ## Related
 
+- [Blog: Teaching the computer to see](blog/teaching-the-computer-to-see.md)
 - [Architecture](architecture.md)
 - [Case study](case-study.md)
 - [README](../README.md)
