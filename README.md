@@ -43,7 +43,7 @@ VerdantMed AI is a research-to-production pipeline for training, validating, and
 | Training      | 2D U-Net, CPU-friendly subset configs |
 | API           | FastAPI |
 | Packaging     | [uv](https://docs.astral.sh/uv/) |
-| Frontend      | Coming soon (thin upload / overlay UI) |
+| Frontend      | Coming soon (thin upload / overlay UI, **pnpm** + Vite) |
 
 **Python:** `>=3.10,<3.13`. PyTorch wheels do not support 3.13+ yet — use **3.12**.
 

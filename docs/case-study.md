@@ -80,5 +80,6 @@ Frontend for human review and workflow (upcoming)
 
 ## Related
 
+- [Blog: Teaching the computer to see (so far)](blog/teaching-the-computer-to-see.md)
 - [Technical Architecture](architecture.md) — models, imaging pipeline, serving
 - [README](../README.md) — overview and quick start
