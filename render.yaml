@@ -1,10 +1,10 @@
-# Neuro on Render — API first; static frontend added after neuro-api is live.
+# Neuro on Render — matches services in My Workspace.
 services:
   - type: web
     name: neuro-api
     runtime: python
     plan: free
-    region: oregon
+    region: virginia
     branch: main
     buildCommand: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu && pip install -e .
     startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
@@ -12,3 +12,13 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: "3.12.8"
+
+  - type: web
+    name: neuro-web
+    runtime: static
+    branch: main
+    buildCommand: cd frontend && npx --yes pnpm@12.4.1 install --frozen-lockfile && npx --yes pnpm@12.4.1 build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://neuro-api-a8ql.onrender.com

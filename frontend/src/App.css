@@ -58,6 +58,10 @@
   background: var(--danger);
 }
 
+.dot.warn {
+  background: #c4a35a;
+}
+
 .workspace {
   animation: rise 0.75s ease-out 0.2s both;
   display: grid;

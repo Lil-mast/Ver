@@ -58,6 +58,7 @@ function verdictFromCounts(counts: Record<string, number>): {
 
 export default function App() {
   const [health, setHealth] = useState<Health | null>(null)
+  const [apiStatus, setApiStatus] = useState<'checking' | 'ready' | 'offline'>('checking')
   const [file, setFile] = useState<File | null>(null)
   const [drag, setDrag] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -66,17 +67,38 @@ export default function App() {
 
   useEffect(() => {
     let cancelled = false
-    fetch(`${API_BASE}/health`)
-      .then(async (r) => {
-        if (!r.ok) throw new Error(`API ${r.status}`)
-        return r.json() as Promise<Health>
-      })
-      .then((h) => {
-        if (!cancelled) setHealth(h)
-      })
-      .catch(() => {
-        if (!cancelled) setHealth(null)
-      })
+    const maxAttempts = 8
+
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+    ;(async () => {
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        if (cancelled) return
+        setApiStatus('checking')
+        try {
+          const ctrl = new AbortController()
+          const timer = setTimeout(() => ctrl.abort(), 45_000)
+          const r = await fetch(`${API_BASE}/health`, { signal: ctrl.signal })
+          clearTimeout(timer)
+          if (!r.ok) throw new Error(`API ${r.status}`)
+          const h = (await r.json()) as Health
+          if (cancelled) return
+          setHealth(h)
+          setApiStatus(h.status === 'ok' ? 'ready' : 'offline')
+          return
+        } catch {
+          if (cancelled) return
+          if (attempt === maxAttempts) {
+            setHealth(null)
+            setApiStatus('offline')
+            return
+          }
+          // Free-tier cold start: wait and retry (up to ~2–3 min total)
+          await sleep(Math.min(5_000 * attempt, 20_000))
+        }
+      }
+    })()
+
     return () => {
       cancelled = true
     }
@@ -151,12 +173,22 @@ export default function App() {
 
       <div className="status-row">
         <span className="pill">
-          <span className={`dot ${health?.status === 'ok' ? '' : 'bad'}`} />
-          {health
-            ? health.model_loaded
-              ? 'Ready to check scans'
-              : 'Service is up, but the AI brain isn’t loaded yet'
-            : 'Helper service offline — start it on port 8000'}
+          <span
+            className={`dot ${
+              apiStatus === 'ready' && health?.model_loaded
+                ? ''
+                : apiStatus === 'checking'
+                  ? 'warn'
+                  : 'bad'
+            }`}
+          />
+          {apiStatus === 'checking'
+            ? 'Waking API… free tier can take a minute'
+            : health
+              ? health.model_loaded
+                ? 'Ready to check scans'
+                : 'Service is up, but the AI brain isn’t loaded yet'
+              : 'API offline — refresh in a bit (free tier sleeps)'}
         </span>
       </div>
 
