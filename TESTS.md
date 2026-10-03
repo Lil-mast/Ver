@@ -1,6 +1,6 @@
-# Demo guide — which scans to show
+# TESTS — which scans to show
 
-Use this when demoing VerdantMed so the audience sees both outcomes clearly.
+Use this when demoing **Neuro** so the audience sees both outcomes clearly.
 
 **Files live under:**
 
@@ -109,6 +109,6 @@ python scripts/train.py --epochs 5 --max-patients 8
 
 ## Related
 
-- [README](../README.md) — setup and API  
-- [Blog: Teaching the computer to see](blog/teaching-the-computer-to-see.md)  
-- [Dev log](dev-log.md)
+- [README](README.md) — setup and API  
+- [Blog: Teaching the computer to see](docs/blog/teaching-the-computer-to-see.md)  
+- [Dev log](docs/dev-log.md)

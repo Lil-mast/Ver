@@ -1,18 +1,18 @@
 # Teaching a computer to see tumors (so far)
 
-*VerdantMed AI build journal — mid-sprint notes from a research-to-API MVP on BraTS MRI.*
+*Neuro build journal — mid-sprint notes from a research-to-API MVP on BraTS MRI.*
 
 **Precision that heals — faded green, focused care.**
 
 ---
 
-This is not a finished product post. It is a snapshot of what we have actually shipped in the VerdantMed repo: environment, data, a 2D segmentation loop, and a FastAPI surface — before the thin UI lands.
+This is not a finished product post. It is a snapshot of what we have actually shipped in the Neuro repo: environment, data, a 2D segmentation loop, and a FastAPI surface — before the thin UI lands.
 
 If you want the dry checklist, see the [development log](dev-log.md). This piece is the story.
 
 ## The bet
 
-Radiology already “sees.” The bottleneck is scale and consistency: drawing tumor subregions on multi-sequence MRI is slow and operator-dependent. VerdantMed’s first slice of product is narrower than “AI for healthcare”:
+Radiology already “sees.” The bottleneck is scale and consistency: drawing tumor subregions on multi-sequence MRI is slow and operator-dependent. Neuro’s first slice of product is narrower than “AI for healthcare”:
 
 > Given one axial BraTS-style MRI slice (four channels), predict a pixel mask for tumor-related classes, and expose that result over HTTP.
 
@@ -29,7 +29,7 @@ Two lessons stuck:
 
 Bonus landmine: extracting a large torch wheel into `/tmp` on a small tmpfs hit **disk quota**. Point `TMPDIR` and `UV_CACHE_DIR` at `$HOME` and the install sails through.
 
-That became commit-shaped scaffolding: `pyproject.toml`, package layout under `src/verdantmed/`, a YAML config for a 2D U-Net, and a README that no longer pretends 3.13 is fine.
+That became commit-shaped scaffolding: `pyproject.toml`, package layout under `src/neuro/`, a YAML config for a 2D U-Net, and a README that no longer pretends 3.13 is fine.
 
 ## How we feed the model
 

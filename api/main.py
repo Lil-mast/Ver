@@ -1,4 +1,4 @@
-"""VerdantMed FastAPI service — health, model info, and slice prediction."""
+"""Neuro FastAPI service — health, model info, and slice prediction."""
 
 from __future__ import annotations
 
@@ -12,8 +12,8 @@ from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from verdantmed.config import project_root
-from verdantmed.inference import SegmentationService
+from neuro.config import project_root
+from neuro.inference import SegmentationService
 
 ROOT = project_root()
 service = SegmentationService()
@@ -30,7 +30,7 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(
-    title="VerdantMed AI",
+    title="Neuro",
     description="2D BraTS slice segmentation API",
     version="0.1.0",
     lifespan=lifespan,

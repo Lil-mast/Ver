@@ -1,6 +1,6 @@
 # Development log
 
-Incremental build notes for the VerdantMed MVP sprint (Wed → Sat morning). Prefer small commits; do not land the whole app in one shot.
+Incremental build notes for the Neuro MVP sprint (Wed → Sat morning). Prefer small commits; do not land the whole app in one shot.
 
 ## Commit cadence
 

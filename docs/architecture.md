@@ -1,6 +1,6 @@
 # Technical Architecture & Implementation
 
-How VerdantMed AI trains, evaluates, and serves medical imaging models — with a focus on computer vision, volumetric data, and clinical metrics.
+How Neuro trains, evaluates, and serves medical imaging models — with a focus on computer vision, volumetric data, and clinical metrics.
 
 ---
 

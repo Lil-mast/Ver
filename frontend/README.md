@@ -1,4 +1,4 @@
-# VerdantMed frontend
+# Neuro frontend
 
 Thin Vite + React UI for BraTS slice upload and segmentation overlays.
 

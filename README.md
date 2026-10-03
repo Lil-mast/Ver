@@ -1,4 +1,4 @@
-# VerdantMed AI
+# Neuro
 
 **Precision that heals — faded green, focused care.**
 
@@ -10,11 +10,11 @@
 
 > Medical image analysis platform for accurate detection and segmentation of pathologies (e.g. brain tumors on MRI) using state-of-the-art deep learning.
 
-VerdantMed AI is a research-to-production pipeline for training, validating, and serving models on medical imaging data. The current MVP targets **2D BraTS slice segmentation** (HDF5) with FastAPI serving and a thin frontend next.
+Neuro is a research-to-production pipeline for training, validating, and serving models on medical imaging data. The current MVP targets **2D BraTS slice segmentation** (HDF5) with FastAPI serving and a thin frontend next.
 
 ---
 
-## Why VerdantMed AI?
+## Why Neuro?
 
 - Addresses a real clinical need: early and precise detection of tumours and other lesions.
 - Built on MONAI + PyTorch (CPU today; CUDA when a GPU is available).
@@ -32,7 +32,7 @@ VerdantMed AI is a research-to-production pipeline for training, validating, and
 | [OR comparison](docs/or-comparison.md) | Manual vs AI outline in a normal OR (simple Mermaid) |
 | [Development log](docs/dev-log.md) | Sprint notes and incremental milestones |
 | [Blog: Teaching the computer to see](docs/blog/teaching-the-computer-to-see.md) | Narrative of what we have built so far |
-| [Demo guide](docs/demo-guide.md) | Which `.h5` scans show tumor vs clear |
+| [TESTS](TESTS.md) | Which `.h5` scans show tumor vs clear (demo picks) |
 
 ---
 

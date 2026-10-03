@@ -15,10 +15,10 @@ from tqdm import tqdm
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from verdantmed.config import load_config
-from verdantmed.data import BraTSHDF5Dataset
-from verdantmed.metrics import dice_mean, dice_per_class
-from verdantmed.models import build_model
+from neuro.config import load_config
+from neuro.data import BraTSHDF5Dataset
+from neuro.metrics import dice_mean, dice_per_class
+from neuro.models import build_model
 
 
 def parse_args() -> argparse.Namespace:

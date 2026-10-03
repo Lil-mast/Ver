@@ -19,12 +19,8 @@
   font-size: clamp(2.75rem, 7vw, 4.25rem);
   line-height: 0.95;
   letter-spacing: -0.03em;
-  color: var(--ink);
-  margin: 0;
-}
-
-.brand span {
   color: var(--verdant);
+  margin: 0;
 }
 
 .tagline {

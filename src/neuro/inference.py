@@ -11,13 +11,13 @@ import numpy as np
 import torch
 from PIL import Image
 
-from verdantmed.config import load_config, project_root
-from verdantmed.data.dataset import (
+from neuro.config import load_config, project_root
+from neuro.data.dataset import (
     _load_h5_pair,
     _normalize_per_channel,
     _resize_hw,
 )
-from verdantmed.models import build_model
+from neuro.models import build_model
 
 # Distinct colors for classes 1..3 (RGB) — faded green clinical palette accents
 CLASS_COLORS = {

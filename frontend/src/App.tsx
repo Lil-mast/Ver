@@ -142,9 +142,7 @@ export default function App() {
   return (
     <div className="shell">
       <header className="hero">
-        <h1 className="brand">
-          Verdant<span>Med</span>
-        </h1>
+        <h1 className="brand">Neuro</h1>
         <p className="tagline">
           Drop in a brain scan. We’ll check it for a possible tumor — and give
           you a plain-English answer.

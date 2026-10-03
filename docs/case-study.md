@@ -1,4 +1,4 @@
-# Case Study: VerdantMed AI
+# Case Study: Neuro
 
 A short framing of the problem, who it is for, and why the product exists.
 
@@ -8,7 +8,7 @@ A short framing of the problem, who it is for, and why the product exists.
 
 Radiologists and oncology teams need **early, precise** reads on imaging studies — especially MRI for brain tumours — but volume is high, subtle lesions are easy to miss, and pixel-level delineation for treatment planning is slow and operator-dependent.
 
-VerdantMed AI is a medical image analysis platform that uses deep learning to **detect and segment** pathologies (starting with brain tumours on multi-modal MRI), then expose those results through a clean API so tools and, later, a frontend can fit into real clinical and research workflows.
+Neuro is a medical image analysis platform that uses deep learning to **detect and segment** pathologies (starting with brain tumours on multi-modal MRI), then expose those results through a clean API so tools and, later, a frontend can fit into real clinical and research workflows.
 
 Tagline: **Precision that heals — faded green, focused care.**
 
