@@ -2,11 +2,11 @@
 
 **Precision that heals — faded green, focused care.**
 
-[![Python 3.10–3.12](https://img.shields.io/badge/python-3.10%E2%80%933.12-#A8D5BA)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-#7FB69A)](https://pytorch.org/)
-[![MONAI](https://img.shields.io/badge/MONAI-1.3+-#A8D5BA)](https://monai.io/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-#A8D5BA)](https://fastapi.tiangolo.com/)
-[![License](https://img.shields.io/badge/license-Apache%202.0-#7FB69A)](LICENSE)
+[![Python 3.10–3.12](https://img.shields.io/badge/python-3.10%E2%80%933.12-A8D5BA)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-7FB69A)](https://pytorch.org/)
+[![MONAI](https://img.shields.io/badge/MONAI-1.3+-A8D5BA)](https://monai.io/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-A8D5BA)](https://fastapi.tiangolo.com/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-7FB69A)](LICENSE)
 
 > I built Neuro so a computer can help spot brain tumors on MRI — then show a plain-English result in a simple web UI.
 
@@ -63,7 +63,7 @@ I use public **BraTS 2020** brain-tumor MRI data, packaged on Kaggle as ready-ma
 | **On disk here** | `data/brats2020/` (gitignored; ~57k slices after unzip) |
 | **How I pulled it** | Kaggle API with a `KGAT` token (`scripts/download_brats.py`) |
 
-Labels mark tumor-related tissue (core / edema / enhancing-style regions). Mid-stack slices usually have tumor; top/bottom cuts are often clear — I documented demo picks in [TESTS.md](TESTS.md).
+Labels mark tumor-related tissue (core / edema / enhancing-style regions). Mid-stack slices usually have tumor; top/bottom cuts are often clear — I documented demo picks in [TESTS.md](docs/TESTS.md).
 
 ---
 
@@ -108,8 +108,7 @@ python scripts/evaluate.py
 | [Case Study](docs/case-study.md) | Problem, audience, and product framing |
 | [OR comparison](docs/or-comparison.md) | Manual vs AI outline in a normal OR |
 | [Development log](docs/dev-log.md) | Sprint notes and milestones |
-| [Blog: Teaching the computer to see](docs/blog/teaching-the-computer-to-see.md) | Narrative of what I built |
-| [TESTS](TESTS.md) | Which `.h5` scans show tumor vs clear |
+| [TESTS](docs/TESTS.md) | Which `.h5` scans show tumor vs clear |
 
 ---
 
@@ -165,7 +164,7 @@ uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 cd frontend && pnpm install && pnpm dev
 ```
 
-Open http://localhost:5173 — drop a brain-scan `.h5` and check for a tumor. Demo file picks: [TESTS.md](TESTS.md).
+Open http://localhost:5173 — drop a brain-scan `.h5` and check for a tumor. Demo file picks: [TESTS.md](docs/TESTS.md).
 
 ---
 
