@@ -59,6 +59,7 @@ function verdictFromCounts(counts: Record<string, number>): {
 export default function App() {
   const [health, setHealth] = useState<Health | null>(null)
   const [apiStatus, setApiStatus] = useState<'checking' | 'ready' | 'offline'>('checking')
+  const [healthTick, setHealthTick] = useState(0)
   const [file, setFile] = useState<File | null>(null)
   const [drag, setDrag] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -67,17 +68,16 @@ export default function App() {
 
   useEffect(() => {
     let cancelled = false
-    const maxAttempts = 8
-
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
     ;(async () => {
-      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-        if (cancelled) return
-        setApiStatus('checking')
+      let attempt = 0
+      while (!cancelled) {
+        attempt += 1
+        setApiStatus((prev) => (prev === 'ready' ? prev : 'checking'))
         try {
           const ctrl = new AbortController()
-          const timer = setTimeout(() => ctrl.abort(), 45_000)
+          const timer = setTimeout(() => ctrl.abort(), 60_000)
           const r = await fetch(`${API_BASE}/health`, { signal: ctrl.signal })
           clearTimeout(timer)
           if (!r.ok) throw new Error(`API ${r.status}`)
@@ -85,24 +85,21 @@ export default function App() {
           if (cancelled) return
           setHealth(h)
           setApiStatus(h.status === 'ok' ? 'ready' : 'offline')
-          return
+          if (h.status === 'ok') return
         } catch {
           if (cancelled) return
-          if (attempt === maxAttempts) {
-            setHealth(null)
-            setApiStatus('offline')
-            return
-          }
-          // Free-tier cold start: wait and retry (up to ~2–3 min total)
-          await sleep(Math.min(5_000 * attempt, 20_000))
+          setHealth(null)
+          setApiStatus('offline')
         }
+        // Keep waking free-tier / redeploys until healthy
+        await sleep(Math.min(4_000 + attempt * 2_000, 15_000))
       }
     })()
 
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [healthTick])
 
   const verdict = useMemo(
     () => (result ? verdictFromCounts(result.class_pixel_counts) : null),
@@ -188,8 +185,20 @@ export default function App() {
               ? health.model_loaded
                 ? 'Ready to check scans'
                 : 'Service is up, but the AI brain isn’t loaded yet'
-              : 'API offline — refresh in a bit (free tier sleeps)'}
+              : 'API still waking — retrying automatically'}
         </span>
+        {apiStatus !== 'ready' && (
+          <button
+            type="button"
+            className="btn ghost"
+            onClick={() => {
+              setApiStatus('checking')
+              setHealthTick((n) => n + 1)
+            }}
+          >
+            Retry now
+          </button>
+        )}
       </div>
 
       <section className="workspace">
