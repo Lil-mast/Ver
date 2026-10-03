@@ -1,6 +1,6 @@
 # Neuro
 
-**Precision that heals — faded green, focused care.**
+**Precision that heals faded green, focused care.**
 
 [![Python 3.10–3.12](https://img.shields.io/badge/python-3.10%E2%80%933.12-A8D5BA)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-7FB69A)](https://pytorch.org/)
@@ -8,7 +8,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-A8D5BA)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/license-Apache%202.0-7FB69A)](LICENSE)
 
-> I built Neuro so a computer can help spot brain tumors on MRI — then show a plain-English result in a simple web UI.
+> I built Neuro so a computer can help spot brain tumors on MRI then show a plain-English result in a simple web UI.
 
 This repo is my research-to-demo pipeline: train a 2D segmentation model on BraTS slices, serve it with FastAPI, and review findings in the frontend.
 
@@ -57,7 +57,7 @@ I use public **BraTS 2020** brain-tumor MRI data, packaged on Kaggle as ready-ma
 | Item | Detail |
 |------|--------|
 | **Source** | [awsaf49/brats2020-training-data](https://www.kaggle.com/datasets/awsaf49/brats2020-training-data) on Kaggle |
-| **Origin** | BraTS 2020 challenge — multi-institution pre-op MRI (gliomas), expert-approved labels |
+| **Origin** | BraTS 2020 challenge, multi-institution pre-op MRI (gliomas), expert-approved labels |
 | **What I downloaded** | Per-slice **HDF5** files (`volume_*_slice_*.h5`) + metadata CSV |
 | **What’s in each file** | 4 MRI channels (T1, T1ce, T2, FLAIR) + a tumor label mask |
 | **On disk here** | `data/brats2020/` (gitignored; ~57k slices after unzip) |
@@ -123,7 +123,7 @@ python scripts/evaluate.py
 | Packaging     | [uv](https://docs.astral.sh/uv/) |
 | Frontend      | Vite + React (**pnpm**) |
 
-**Python:** `>=3.10,<3.13` — I use **3.12** (PyTorch wheels don’t support 3.13+ yet).
+**Python:** `>=3.10,<3.13` I use **3.12** (PyTorch wheels don’t support 3.13+ yet).
 
 ---
 
@@ -164,10 +164,10 @@ uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 cd frontend && pnpm install && pnpm dev
 ```
 
-Open http://localhost:5173 — drop a brain-scan `.h5` and check for a tumor. Demo file picks: [TESTS.md](docs/TESTS.md).
+Open http://localhost:5173, drop a brain-scan `.h5` and check for a tumor. Demo file picks: [TESTS.md](docs/TESTS.md).
 
 ---
 
 ## License
 
-Apache 2.0 — see [LICENSE](LICENSE).
+Apache 2.0 see [LICENSE](LICENSE).
