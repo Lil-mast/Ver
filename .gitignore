@@ -10,12 +10,14 @@ build/
 .ruff_cache/
 .mypy_cache/
 
-# Data & artifacts (repo-root only — do not ignore src/verdantmed/data)
+# Data & artifacts (repo-root only — do not ignore src/neuro/data)
 /data/
-/checkpoints/
+/checkpoints/*
+!/checkpoints/best.pt
 /runs/
 /outputs/
 *.pt
+!checkpoints/best.pt
 *.pth
 *.onnx
 *.h5

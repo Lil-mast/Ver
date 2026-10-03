@@ -1,0 +1,14 @@
+# Neuro on Render — API first; static frontend added after neuro-api is live.
+services:
+  - type: web
+    name: neuro-api
+    runtime: python
+    plan: free
+    region: oregon
+    branch: main
+    buildCommand: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu && pip install -e .
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
