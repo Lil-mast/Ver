@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type DragEvent } from 'react'
+import { useCallback, useEffect, useMemo, useState, type DragEvent } from 'react'
 import './App.css'
 
 type Health = {
@@ -20,8 +20,40 @@ type PredictResponse = {
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '/api'
 
+/** Ignore tiny speckles — need a real blob of “suspicious” tissue. */
+const TUMOR_PIXEL_THRESHOLD = 80
+
 function b64Src(b64: string) {
   return `data:image/png;base64,${b64}`
+}
+
+function tumorPixelCount(counts: Record<string, number>): number {
+  return Object.entries(counts).reduce((sum, [cls, n]) => {
+    if (cls === '0') return sum
+    return sum + n
+  }, 0)
+}
+
+function verdictFromCounts(counts: Record<string, number>): {
+  found: boolean
+  headline: string
+  detail: string
+} {
+  const tumorPx = tumorPixelCount(counts)
+  if (tumorPx >= TUMOR_PIXEL_THRESHOLD) {
+    return {
+      found: true,
+      headline: 'Heads up — this scan looks suspicious.',
+      detail:
+        'Our AI thinks there may be a tumor here. In a real clinic this would mean: get checked urgently — don’t wait it out.',
+    }
+  }
+  return {
+    found: false,
+    headline: 'Looking clear — no tumor spotted.',
+    detail:
+      'Nothing worrying showed up on this one. Demo verdict: you’re free to go grab some KFC. (Still a demo, not a doctor.)',
+  }
 }
 
 export default function App() {
@@ -43,14 +75,17 @@ export default function App() {
         if (!cancelled) setHealth(h)
       })
       .catch(() => {
-        if (!cancelled) {
-          setHealth(null)
-        }
+        if (!cancelled) setHealth(null)
       })
     return () => {
       cancelled = true
     }
   }, [])
+
+  const verdict = useMemo(
+    () => (result ? verdictFromCounts(result.class_pixel_counts) : null),
+    [result],
+  )
 
   const onFiles = useCallback((list: FileList | null) => {
     const next = list?.[0] ?? null
@@ -62,7 +97,7 @@ export default function App() {
     }
     const lower = next.name.toLowerCase()
     if (!lower.endsWith('.h5') && !lower.endsWith('.hdf5')) {
-      setError('Choose a BraTS HDF5 slice (.h5 / .hdf5).')
+      setError('Please pick a brain-scan file ending in .h5')
       setFile(null)
       return
     }
@@ -83,12 +118,16 @@ export default function App() {
       })
       if (!res.ok) {
         const detail = await res.text()
-        throw new Error(detail || `Predict failed (${res.status})`)
+        throw new Error(detail || `Something went wrong (${res.status})`)
       }
       const data = (await res.json()) as PredictResponse
       setResult(data)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Prediction failed')
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Could not check this scan — is the helper service running?',
+      )
     } finally {
       setBusy(false)
     }
@@ -107,8 +146,8 @@ export default function App() {
           Verdant<span>Med</span>
         </h1>
         <p className="tagline">
-          Precision that heals — upload a BraTS MRI slice and see the
-          segmentation overlay.
+          Drop in a brain scan. We’ll check it for a possible tumor — and give
+          you a plain-English answer.
         </p>
       </header>
 
@@ -116,10 +155,10 @@ export default function App() {
         <span className="pill">
           <span className={`dot ${health?.status === 'ok' ? '' : 'bad'}`} />
           {health
-            ? `API ${health.status} · ${health.device}${
-                health.model_loaded ? ' · weights loaded' : ' · no checkpoint'
-              }`
-            : 'API unreachable — start uvicorn on :8000'}
+            ? health.model_loaded
+              ? 'Ready to check scans'
+              : 'Service is up, but the AI brain isn’t loaded yet'
+            : 'Helper service offline — start it on port 8000'}
         </span>
       </div>
 
@@ -137,11 +176,11 @@ export default function App() {
             type="file"
             accept=".h5,.hdf5,application/x-hdf5,application/octet-stream"
             onChange={(e) => onFiles(e.target.files)}
-            aria-label="Upload BraTS HDF5 slice"
+            aria-label="Upload a brain scan file"
           />
           <div className="upload-copy">
-            <strong>Drop a slice here</strong>
-            <span>or click to choose volume_*_slice_*.h5</span>
+            <strong>Drop a brain scan here</strong>
+            <span>or click to choose a .h5 file from your computer</span>
           </div>
         </div>
 
@@ -152,7 +191,7 @@ export default function App() {
             disabled={!file || busy || !health?.model_loaded}
             onClick={() => void runPredict()}
           >
-            {busy ? 'Segmenting…' : 'Run segmentation'}
+            {busy ? 'Checking the scan…' : 'Check for a tumor'}
           </button>
           <button
             type="button"
@@ -164,43 +203,55 @@ export default function App() {
               setError(null)
             }}
           >
-            Clear
+            Start over
           </button>
-          {file ? <span className="file-name">{file.name}</span> : null}
+          {file ? <span className="file-name">Selected: {file.name}</span> : null}
         </div>
 
         {error ? <p className="error">{error}</p> : null}
 
-        {result ? (
+        {result && verdict ? (
           <div className="results">
-            <h2 className="panel-title">Result</h2>
+            <div
+              className={`verdict ${verdict.found ? 'urgent' : 'clear'}`}
+              role="status"
+            >
+              <p className="verdict-kicker">
+                {verdict.found ? 'Needs attention' : 'All clear'}
+              </p>
+              <h2 className="verdict-title">{verdict.headline}</h2>
+              <p className="verdict-detail">{verdict.detail}</p>
+            </div>
+
+            <h3 className="panel-title">What you’re looking at</h3>
             <div className="gallery">
               <figure className="frame">
-                <figcaption>Slice</figcaption>
-                <img src={b64Src(result.image_png_base64)} alt="MRI slice" />
+                <figcaption>The brain scan</figcaption>
+                <img
+                  src={b64Src(result.image_png_base64)}
+                  alt="The original brain scan"
+                />
               </figure>
               <figure className="frame">
-                <figcaption>Mask</figcaption>
-                <img src={b64Src(result.mask_png_base64)} alt="Predicted mask" />
+                <figcaption>Where it looks odd</figcaption>
+                <img
+                  src={b64Src(result.mask_png_base64)}
+                  alt="Areas the AI thinks may be abnormal"
+                />
               </figure>
               <figure className="frame">
-                <figcaption>Overlay</figcaption>
+                <figcaption>Scan with findings marked</figcaption>
                 <img
                   src={b64Src(result.overlay_png_base64)}
-                  alt="Segmentation overlay"
+                  alt="Brain scan with possible tumor areas highlighted"
                 />
               </figure>
             </div>
-            <p className="counts">
-              {Object.entries(result.class_pixel_counts).map(([cls, n]) => (
-                <span key={cls}>
-                  class {cls}: <strong>{n}</strong> px
-                </span>
-              ))}
-            </p>
+
             <p className="note">
-              Overlay quality follows the loaded checkpoint. Retrain on real
-              BraTS patients for stronger masks — see the project README.
+              Fun demo only — not real medical advice. A clinician would still
+              read the full study. Colored patches = “hey, look here,” not a
+              prescription.
             </p>
           </div>
         ) : null}
