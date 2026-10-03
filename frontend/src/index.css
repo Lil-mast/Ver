@@ -1,0 +1,75 @@
+:root {
+  --verdant: #7fb69a;
+  --verdant-soft: #a8d5ba;
+  --ink: #1c2a24;
+  --ink-muted: #4a5c54;
+  --paper: #eef5f0;
+  --paper-deep: #d5e6dc;
+  --glow: rgba(127, 182, 154, 0.35);
+  --danger: #9b3d3d;
+  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-body: "Source Sans 3", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 90% 60% at 10% -10%, var(--verdant-soft) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 100% 20%, rgba(127, 182, 154, 0.45) 0%, transparent 50%),
+    linear-gradient(165deg, #f4faf6 0%, var(--paper) 40%, var(--paper-deep) 100%);
+  background-attachment: fixed;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--glow);
+  }
+  50% {
+    box-shadow: 0 0 0 12px transparent;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -118,6 +118,6 @@ Then `POST /predict` with a `volume_*_slice_*.h5` file and decode the overlay PN
 
 ---
 
-*Next on the board: a thin **pnpm** + Vite React frontend that makes that overlay human-visible without curl, and a real-data retrain so the mask starts to mean something on BraTS itself.*
+*Shipped next: a thin **pnpm** + Vite React frontend that makes that overlay human-visible without curl. Still ahead: a real-data retrain so the mask starts to mean something on BraTS itself.*
 
 Related: [Architecture](architecture.md) · [Case study](case-study.md) · [Dev log](dev-log.md) · [README](../README.md)

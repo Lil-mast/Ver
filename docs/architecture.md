@@ -122,7 +122,7 @@ The application API is **FastAPI** (+ Uvicorn):
 - Return masks, overlays metadata, and scalar metrics / confidence
 - Health and model-info routes for ops
 
-A web frontend will consume this API later; it is intentionally out of scope for the first backend slice.
+A web frontend consumes this API (Vite + React, `frontend/` via **pnpm**): upload a BraTS `.h5` slice and display grayscale / mask / overlay PNGs.
 
 Optional later: TorchServe / Triton behind the same FastAPI façade for high-throughput batch serving.
 
@@ -146,7 +146,7 @@ Optional later: TorchServe / Triton behind the same FastAPI façade for high-thr
 2. **GPU efficiency** — AMP, sensible batch / window sizes, avoid unnecessary host–device copies
 3. **Clinical metrics first** — Dice/HD95 and related KPIs as first-class evaluation, not afterthoughts
 4. **Extensible modalities** — shared transforms and model registry so CT/X-ray paths reuse the same skeleton
-5. **API before UI** — solid FastAPI contract first; frontend follows
+5. **API + thin UI** — FastAPI contract first; Vite/React overlay UI for human review
 
 ---
 

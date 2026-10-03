@@ -43,7 +43,7 @@ VerdantMed AI is a research-to-production pipeline for training, validating, and
 | Training      | 2D U-Net, CPU-friendly subset configs |
 | API           | FastAPI |
 | Packaging     | [uv](https://docs.astral.sh/uv/) |
-| Frontend      | Coming soon (thin upload / overlay UI, **pnpm** + Vite) |
+| Frontend      | Vite + React (**pnpm**), upload / overlay UI |
 
 **Python:** `>=3.10,<3.13`. PyTorch wheels do not support 3.13+ yet — use **3.12**.
 
@@ -101,7 +101,20 @@ uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 - `POST /predict` — multipart upload of a `.h5` slice → PNG overlays (base64) + class counts  
 - `POST /predict/path?path=...` — same for a server-local path (dev)
 
----
+### Frontend
+
+```bash
+# Terminal A — API
+source .venv/bin/activate
+uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+
+# Terminal B — UI (pnpm)
+cd frontend
+pnpm install
+pnpm dev
+```
+
+Open http://localhost:5173 — drop a `volume_*_slice_*.h5` file and run segmentation.
 
 ## License
 

@@ -12,7 +12,7 @@ Aim for **at least five commits** before calling the MVP done. Each commit shoul
 | 2 | BraTS HDF5 dataset + download helper | done (`1db0a16`) |
 | 3 | 2D U-Net + train / eval smoke scripts | done |
 | 4 | FastAPI `/health` + `/model` + `/predict` | done |
-| 5 | Thin frontend + docs polish | pending |
+| 5 | Thin frontend + docs polish | done |
 
 ### Synthetic data (dev fixture)
 
@@ -31,6 +31,13 @@ uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 # GET  /health  /model
 # POST /predict  (multipart .h5)
 # POST /predict/path?path=data/brats2020/.../volume_1_slice_31.h5
+```
+
+### Frontend
+
+```bash
+cd frontend && pnpm install && pnpm dev
+# http://localhost:5173  (proxies /api → :8000)
 ```
 
 
