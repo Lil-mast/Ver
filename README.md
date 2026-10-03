@@ -29,8 +29,10 @@ VerdantMed AI is a research-to-production pipeline for training, validating, and
 |----------|----------------|
 | [Technical Architecture](docs/architecture.md) | Pipeline, models, imaging stack, FastAPI serving, metrics |
 | [Case Study](docs/case-study.md) | Problem, audience, and product framing |
+| [OR comparison](docs/or-comparison.md) | Manual vs AI outline in a normal OR (simple Mermaid) |
 | [Development log](docs/dev-log.md) | Sprint notes and incremental milestones |
 | [Blog: Teaching the computer to see](docs/blog/teaching-the-computer-to-see.md) | Narrative of what we have built so far |
+| [Demo guide](docs/demo-guide.md) | Which `.h5` scans show tumor vs clear |
 
 ---
 
