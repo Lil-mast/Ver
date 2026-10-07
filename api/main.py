@@ -1,4 +1,4 @@
-"""Neuro FastAPI service — health, model info, and slice prediction."""
+"""Neuro FastAPI service health, model info, and slice prediction."""
 
 from __future__ import annotations
 
