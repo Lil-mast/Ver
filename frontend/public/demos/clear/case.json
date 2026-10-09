@@ -1,0 +1,29 @@
+{
+  "id": "clear",
+  "source": "volume_1_slice_10.h5",
+  "title": "Clear reference",
+  "summary": "No tumor pixels are marked in this slice\u2019s reference label. Demo verdict: clear for this cut, so you can go grab some KFC. It still says nothing about the rest of a scan.",
+  "where": "Nowhere on this slice: the reference label contains no marked tumor pixels. A clear single cut does not mean the full scan is clear.",
+  "nerdy": "240 \u00d7 240 pixels \u00b7 4 MRI channels (T1, T1ce, T2, FLAIR) \u00b7 0 / 57,600 tumor-labeled pixels.",
+  "has_tumor": false,
+  "source_dataset": "BraTS 2020",
+  "label_semantics": "Expert dataset reference mask; not an AI prediction.",
+  "technical": {
+    "image_shape": [
+      240,
+      240
+    ],
+    "labeled_pixel_count": 0,
+    "labeled_pixel_percent": 0.0,
+    "labeled_region_centroid_xy_percent": null,
+    "non_background_classes": []
+  },
+  "images": {
+    "scan": "scan.png",
+    "label": "label.png",
+    "overlay": "overlay.png"
+  },
+  "class_pixel_counts": {
+    "0": 57600
+  }
+}

@@ -1,0 +1,109 @@
+[
+  {
+    "id": "clear",
+    "source": "volume_1_slice_10.h5",
+    "title": "Clear reference",
+    "summary": "No tumor pixels are marked in this slice\u2019s reference label. Demo verdict: clear for this cut, so you can go grab some KFC. It still says nothing about the rest of a scan.",
+    "where": "Nowhere on this slice: the reference label contains no marked tumor pixels. A clear single cut does not mean the full scan is clear.",
+    "nerdy": "240 \u00d7 240 pixels \u00b7 4 MRI channels (T1, T1ce, T2, FLAIR) \u00b7 0 / 57,600 tumor-labeled pixels.",
+    "has_tumor": false,
+    "source_dataset": "BraTS 2020",
+    "label_semantics": "Expert dataset reference mask; not an AI prediction.",
+    "technical": {
+      "image_shape": [
+        240,
+        240
+      ],
+      "labeled_pixel_count": 0,
+      "labeled_pixel_percent": 0.0,
+      "labeled_region_centroid_xy_percent": null,
+      "non_background_classes": []
+    },
+    "images": {
+      "scan": "scan.png",
+      "label": "label.png",
+      "overlay": "overlay.png"
+    },
+    "class_pixel_counts": {
+      "0": 57600
+    }
+  },
+  {
+    "id": "tumor-a",
+    "source": "volume_1_slice_68.h5",
+    "title": "Tumor example A",
+    "summary": "The expert reference label marks tumor tissue on this slice.",
+    "where": "On the displayed slice, the labeled region sits around the center and extends toward the right side of the image. Image-orientation metadata is not included, so this view cannot reliably identify anatomical left or right.",
+    "nerdy": "240 \u00d7 240 pixels \u00b7 5,040 labeled pixels (8.8%) \u00b7 label centroid at x=52%, y=39% of the displayed image \u00b7 3 non-background label classes.",
+    "has_tumor": true,
+    "source_dataset": "BraTS 2020",
+    "label_semantics": "Expert dataset reference mask; not an AI prediction.",
+    "technical": {
+      "image_shape": [
+        240,
+        240
+      ],
+      "labeled_pixel_count": 5040,
+      "labeled_pixel_percent": 8.75,
+      "labeled_region_centroid_xy_percent": [
+        52.4,
+        38.9
+      ],
+      "non_background_classes": [
+        1,
+        2,
+        3
+      ]
+    },
+    "images": {
+      "scan": "scan.png",
+      "label": "label.png",
+      "overlay": "overlay.png"
+    },
+    "class_pixel_counts": {
+      "0": 52560,
+      "1": 566,
+      "2": 3647,
+      "3": 827
+    }
+  },
+  {
+    "id": "tumor-b",
+    "source": "volume_40_slice_56.h5",
+    "title": "Tumor example B",
+    "summary": "The expert reference label marks tumor tissue on this slice.",
+    "where": "On the displayed slice, the labeled region is left of center and extends across the middle. Image-orientation metadata is not included, so this view cannot reliably identify anatomical left or right.",
+    "nerdy": "240 \u00d7 240 pixels \u00b7 4,881 labeled pixels (8.5%) \u00b7 label centroid at x=29%, y=53% of the displayed image \u00b7 3 non-background label classes.",
+    "has_tumor": true,
+    "source_dataset": "BraTS 2020",
+    "label_semantics": "Expert dataset reference mask; not an AI prediction.",
+    "technical": {
+      "image_shape": [
+        240,
+        240
+      ],
+      "labeled_pixel_count": 4881,
+      "labeled_pixel_percent": 8.47,
+      "labeled_region_centroid_xy_percent": [
+        29.4,
+        52.9
+      ],
+      "non_background_classes": [
+        1,
+        2,
+        3
+      ]
+    },
+    "images": {
+      "scan": "scan.png",
+      "label": "label.png",
+      "overlay": "overlay.png"
+    },
+    "class_pixel_counts": {
+      "0": 52719,
+      "1": 967,
+      "2": 3196,
+      "3": 718
+    }
+  }
+]

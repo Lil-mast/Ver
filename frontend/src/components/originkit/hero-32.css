@@ -1,0 +1,7 @@
+/* hero-32 — Deblot AI infrastructure hero (ASCII portrait + steps) */
+
+@import url("https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@500;600&display=swap");
+
+@theme {
+  --font-gemunu: "Gemunu Libre", Inter, ui-sans-serif, sans-serif;
+}

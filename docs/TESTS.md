@@ -74,6 +74,13 @@ Good contrast files for the fun KFC line:
 
 ## How to run the demo
 
+The site also includes three built-in **BraTS reference examples** (one clear,
+two with labeled tumor tissue). Choose one under “Or explore a sample case” to
+show its paired scan, expert label, and overlay. These static examples work
+without the API; the colored area is dataset ground truth, not the model output.
+Their small, web-ready files live in `frontend/public/demos/`. Re-export them
+from the local BraTS download with `python scripts/export_demo_cases.py`.
+
 ```bash
 # Terminal A — API
 cd /path/to/Ver
